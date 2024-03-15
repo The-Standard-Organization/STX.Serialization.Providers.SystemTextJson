@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.SystemTextJson", "STX.Serialization.Providers.SystemTextJson\STX.Serialization.Providers.SystemTextJson.csproj", "{AE103EBE-A027-4C9B-9D6F-6334C079BD16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.SystemTextJson.Infrastructure.Build", "STX.Serialization.Providers.SystemTextJson.Infrastructure.Build\STX.Serialization.Providers.SystemTextJson.Infrastructure.Build.csproj", "{D52B09AF-48D2-46A2-B4D2-EE83B91BD36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.SystemTextJson.Tests.Unit", "STX.Serialization.Providers.SystemTextJson.Tests.Unit\STX.Serialization.Providers.SystemTextJson.Tests.Unit.csproj", "{6E48EBC6-A985-4D60-9425-3A6503AFB26D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STX.Serialization.Providers.SystemTextJson.Tests.Acceptance", "STX.Serialization.Providers.SystemTextJson.Tests.Acceptance\STX.Serialization.Providers.SystemTextJson.Tests.Acceptance.csproj", "{115167EF-58B4-4B80-918A-A30A00EC813E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE103EBE-A027-4C9B-9D6F-6334C079BD16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE103EBE-A027-4C9B-9D6F-6334C079BD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE103EBE-A027-4C9B-9D6F-6334C079BD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE103EBE-A027-4C9B-9D6F-6334C079BD16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D52B09AF-48D2-46A2-B4D2-EE83B91BD36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D52B09AF-48D2-46A2-B4D2-EE83B91BD36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D52B09AF-48D2-46A2-B4D2-EE83B91BD36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D52B09AF-48D2-46A2-B4D2-EE83B91BD36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E48EBC6-A985-4D60-9425-3A6503AFB26D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E48EBC6-A985-4D60-9425-3A6503AFB26D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E48EBC6-A985-4D60-9425-3A6503AFB26D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E48EBC6-A985-4D60-9425-3A6503AFB26D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{115167EF-58B4-4B80-918A-A30A00EC813E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{115167EF-58B4-4B80-918A-A30A00EC813E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{115167EF-58B4-4B80-918A-A30A00EC813E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{115167EF-58B4-4B80-918A-A30A00EC813E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BC94BC3-6CB1-4009-A243-A110AFBA32ED}
+	EndGlobalSection
+EndGlobal
