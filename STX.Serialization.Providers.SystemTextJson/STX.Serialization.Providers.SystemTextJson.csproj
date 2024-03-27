@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>disable</Nullable>
+		<Nullable>enable</Nullable>
 		<Title>STX.Serialization.Providers.SystemTextJson</Title>
 		<Product>STX.Serialization.Providers.SystemTextJson</Product>
 		<PackageId>STX.Serialization.Providers.SystemTextJson</PackageId>
@@ -42,6 +42,10 @@
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="System.Text.Json" Version="8.0.3" />
 	</ItemGroup>
 
 </Project>
