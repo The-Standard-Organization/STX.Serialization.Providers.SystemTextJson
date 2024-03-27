@@ -7,5 +7,6 @@ namespace STX.Serialization.Providers.SystemTextJson.Brokers
     internal interface ISystemTextSerializationBroker
     {
         string Serialize<T>(T @object);
+        T Deserialize<T>(string json);
     }
 }

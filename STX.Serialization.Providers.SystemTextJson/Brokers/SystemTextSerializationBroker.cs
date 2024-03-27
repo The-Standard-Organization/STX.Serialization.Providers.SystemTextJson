@@ -17,5 +17,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Brokers
 
         public string Serialize<T>(T @object) =>
             JsonSerializer.Serialize(@object, jsonSerializerOptions);
+
+        public T Deserialize<T>(string json) =>
+            JsonSerializer.Deserialize<T>(json, jsonSerializerOptions);
     }
 }
