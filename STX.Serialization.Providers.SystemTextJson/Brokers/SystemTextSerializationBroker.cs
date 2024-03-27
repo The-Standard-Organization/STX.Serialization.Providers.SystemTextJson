@@ -17,9 +17,9 @@ namespace STX.Serialization.Providers.SystemTextJson.Brokers
             this.jsonSerializerOptions = jsonSerializerOptions;
 
         public async ValueTask SerializeAsync<T>(
-        Stream utf8JsonStream,
-        T @object,
-        CancellationToken cancellationToken = default)
+            Stream utf8JsonStream,
+            T @object,
+            CancellationToken cancellationToken = default)
         {
             await JsonSerializer.SerializeAsync(
                 utf8Json: utf8JsonStream,
