@@ -14,5 +14,9 @@ namespace STX.Serialization.Providers.SystemTextJson.Brokers
             Stream utf8JsonStream,
             T @object,
             CancellationToken cancellationToken = default);
+
+        ValueTask<T?> DeserializeAsync<T>(
+            Stream stream,
+            CancellationToken cancellationToken = default);
     }
 }

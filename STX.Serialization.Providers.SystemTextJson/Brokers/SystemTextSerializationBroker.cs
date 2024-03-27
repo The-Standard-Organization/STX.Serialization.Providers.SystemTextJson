@@ -27,5 +27,15 @@ namespace STX.Serialization.Providers.SystemTextJson.Brokers
                 options: jsonSerializerOptions,
                 cancellationToken);
         }
+
+        public async ValueTask<T?> DeserializeAsync<T>(
+            Stream stream,
+            CancellationToken cancellationToken = default)
+        {
+            return await JsonSerializer.DeserializeAsync<T>(
+                utf8Json: stream,
+                options: jsonSerializerOptions,
+                cancellationToken);
+        }
     }
 }
