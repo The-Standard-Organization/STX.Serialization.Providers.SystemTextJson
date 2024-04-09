@@ -65,7 +65,6 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
 
-
         [Fact]
         public async Task ShouldThrowServiceExceptionOnSerializeAsync()
         {

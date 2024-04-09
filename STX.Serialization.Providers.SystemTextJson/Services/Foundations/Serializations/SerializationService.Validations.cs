@@ -12,7 +12,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             if (@object is null)
             {
-                throw new NullSerializationException(message: $"Input of type {typeof(int)} is null.");
+                throw new NullSerializationException(message: $"Input of type {typeof(TInput)} is null.");
             }
         }
     }

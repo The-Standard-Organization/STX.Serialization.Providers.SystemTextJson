@@ -35,6 +35,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(randomSerializedOutput);
                     outputStream.Write(bytes, 0, bytes.Length);
+                    outputStream.Position = 0;
                 })
                 .Returns(ValueTask.CompletedTask);
 
@@ -72,6 +73,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(randomSerializedOutput);
                     outputStream.Write(bytes, 0, bytes.Length);
+                    outputStream.Position = 0;
                 })
                 .Returns(ValueTask.CompletedTask);
 
@@ -109,6 +111,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(randomSerializedOutput);
                     outputStream.Write(bytes, 0, bytes.Length);
+                    outputStream.Position = 0;
                 })
                 .Returns(ValueTask.CompletedTask);
 
