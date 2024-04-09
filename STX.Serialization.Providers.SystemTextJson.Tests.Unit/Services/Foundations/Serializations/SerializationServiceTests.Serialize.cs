@@ -84,5 +84,41 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
                     Times.Once);
         }
+
+        [Fact]
+        public async Task ShouldSerializeObjectAndReturnAsStreamAsync()
+        {
+            // given
+            CancellationToken cancellationToken = default;
+            dynamic randomObject = CreateRandomObject();
+            object inputObject = randomObject;
+            string randomSerializedOutput = GetRandomString();
+            string expectedResult = randomSerializedOutput.DeepClone();
+            MemoryStream randomOutputStream = new MemoryStream();
+
+            systemTextSerializationBrokerMock.Setup(service =>
+                service.SerializeAsync(
+                    It.Is(SameMemoryStreamAs(randomOutputStream)),
+                    inputObject,
+                    It.IsAny<CancellationToken>()))
+                .Callback<Stream, object, CancellationToken>((outputStream, obj, token) =>
+                {
+                    byte[] bytes = Encoding.UTF8.GetBytes(randomSerializedOutput);
+                    outputStream.Write(bytes, 0, bytes.Length);
+                })
+                .Returns(ValueTask.CompletedTask);
+
+            // when
+            MemoryStream actualStream = await this.serializationService
+                .SerializeAsync<object, MemoryStream>(inputObject, cancellationToken);
+
+            // then
+            string actualResult = Encoding.UTF8.GetString(actualStream.ToArray());
+            actualResult.Should().BeEquivalentTo(expectedResult);
+
+            systemTextSerializationBrokerMock.Verify(service =>
+                service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
+                    Times.Once);
+        }
     }
 }
