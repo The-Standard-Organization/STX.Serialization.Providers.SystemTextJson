@@ -1,0 +1,63 @@
+﻿// ----------------------------------------------------------------------------------
+// Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
+// ----------------------------------------------------------------------------------
+
+using System;
+using System.IO;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Moq;
+using STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations;
+using Xunit;
+
+namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundations.Serializations
+{
+    public partial class SerializationServiceTests
+    {
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnSerializeAsync()
+        {
+            CancellationToken cancellationToken = default;
+            dynamic randomObject = CreateRandomObject();
+            object inputObject = randomObject;
+            MemoryStream randomOutputStream = new MemoryStream();
+            string exceptionMessage = GetRandomString();
+            Exception randomException = new Exception(exceptionMessage);
+
+            JsonException dependencyException = new JsonException(
+                message: exceptionMessage,
+                innerException: randomException);
+
+            var failedSerializationException =
+                new FailedSerializationException(
+                    message: "Failed serialization error occurred, contact support.",
+                    innerException: dependencyException);
+
+            var expectedSerializationDependencyException =
+                new SerializationDependencyException(
+                    message: "Serialization dependency validation occurred, please try again.",
+                    innerException: failedSerializationException);
+
+            systemTextSerializationBrokerMock.Setup(service =>
+                service.SerializeAsync(
+                    It.IsAny<Stream>(),
+                    It.IsAny<object>,
+                    It.IsAny<CancellationToken>()))
+                .ThrowsAsync(dependencyException);
+
+            // when
+            ValueTask<int> serializationTask = this.serializationService
+                .SerializeAsync<object, int>(inputObject, cancellationToken);
+
+            SerializationDependencyException actualSerializationDependencyException =
+                await Assert.ThrowsAsync<SerializationDependencyException>(() =>
+                    serializationTask.AsTask());
+
+            // then
+            actualSerializationDependencyException.Should().BeEquivalentTo(expectedSerializationDependencyException);
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
+        }
+    }
+}

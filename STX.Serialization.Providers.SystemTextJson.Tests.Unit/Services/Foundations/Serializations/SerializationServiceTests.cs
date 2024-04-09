@@ -28,7 +28,6 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             this.serializationService = new SerializationService(systemTextSerializationBrokerMock.Object);
         }
 
-
         static dynamic CreateRandomObject()
         {
             dynamic obj = new ExpandoObject();
