@@ -6,10 +6,10 @@ using Xeptions;
 
 namespace STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations
 {
-    internal class SerializationValidationException : Xeption
+    public class NullSerializationException : Xeption
     {
-        public SerializationValidationException(string message, Xeption innerException)
-            : base(message, innerException)
+        public NullSerializationException(string message)
+            : base(message)
         { }
     }
 }
