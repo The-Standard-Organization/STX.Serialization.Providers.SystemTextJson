@@ -12,7 +12,7 @@ using STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializatio
 
 namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serializations
 {
-    internal class SerializationService : ISerializationService
+    internal partial class SerializationService : ISerializationService
     {
         private readonly ISystemTextSerializationBroker systemTextSerializationBroker;
 
@@ -21,28 +21,38 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             this.systemTextSerializationBroker = systemTextSerializationBroker;
         }
 
-        public async ValueTask<TOutput> SerializeAsync<TInput, TOutput>(
+        public ValueTask<TOutput> SerializeAsync<TInput, TOutput>(
             TInput @object,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default) =>
+            TryCatch(async () =>
+            {
+                ValidateOnSerialize(@object);
+                MemoryStream outputStream = new MemoryStream();
+
+                switch (typeof(TOutput))
+                {
+                    case Type _ when typeof(TOutput) == typeof(string):
+                        await Serialize<TInput>(@object, outputStream, cancellationToken);
+                        return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
+
+                    case Type _ when typeof(TOutput) == typeof(byte[]):
+                        await Serialize<TInput>(@object, outputStream, cancellationToken);
+                        return (TOutput)(object)outputStream.ToArray();
+
+                    case Type _ when typeof(TOutput) == typeof(Stream):
+                        await Serialize<TInput>(@object, outputStream, cancellationToken);
+                        return (TOutput)(object)outputStream;
+
+                    default:
+                        throw new InvalidOperationSerializationException($"Unsupported output type: {typeof(int)}. " +
+                            $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
+                }
+            });
+
+        private async Task Serialize<TInput>(TInput @object, MemoryStream outputStream, CancellationToken cancellationToken)
         {
-            MemoryStream outputStream = new MemoryStream();
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
             outputStream.Position = 0;
-
-            switch (typeof(TOutput))
-            {
-                case Type _ when typeof(TOutput) == typeof(string):
-                    return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
-
-                case Type _ when typeof(TOutput) == typeof(byte[]):
-                    return (TOutput)(object)outputStream.ToArray();
-
-                case Type _ when typeof(TOutput) == typeof(Stream):
-                    return (TOutput)(object)outputStream;
-
-                default:
-                    throw new InvalidOperationSerializationException($"Unsupported output type: {typeof(TOutput)}");
-            }
         }
 
         public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(

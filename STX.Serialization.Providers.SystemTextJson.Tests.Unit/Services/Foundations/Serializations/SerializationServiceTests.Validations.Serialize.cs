@@ -26,7 +26,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             MemoryStream randomOutputStream = new MemoryStream();
 
             var invalidOperationSerializationException = new InvalidOperationSerializationException(
-                message: $"Unsupported output type: {typeof(int)}");
+                message: $"Unsupported output type: {typeof(int)}. " +
+                    $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
 
             var expectedSerializationValidationException =
                 new SerializationValidationException(
