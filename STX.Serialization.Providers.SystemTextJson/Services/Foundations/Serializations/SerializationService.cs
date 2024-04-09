@@ -7,8 +7,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LHDS.Core.Models.Foundations.Addresses.Exceptions;
 using STX.Serialization.Providers.SystemTextJson.Brokers;
+using STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations;
 
 namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serializations
 {
