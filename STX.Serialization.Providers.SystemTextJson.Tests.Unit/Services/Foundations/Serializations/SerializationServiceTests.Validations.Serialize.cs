@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,7 +52,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             object inputObject = nullObject;
 
             var nullSerializationException = new NullSerializationException(
-                message: $"Input of type {typeof(int)} is null.");
+                message: $"Input is null.");
 
             var expectedSerializationValidationException =
                 new SerializationValidationException(
@@ -59,8 +60,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                     innerException: nullSerializationException);
 
             // when
-            ValueTask<int> serializationTask = this.serializationService
-                .SerializeAsync<object, int>(inputObject, cancellationToken);
+            ValueTask<Guid> serializationTask = this.serializationService
+                .SerializeAsync<object, Guid>(inputObject, cancellationToken);
 
             SerializationValidationException actualSerializationValidationException =
                 await Assert.ThrowsAsync<SerializationValidationException>(() =>
