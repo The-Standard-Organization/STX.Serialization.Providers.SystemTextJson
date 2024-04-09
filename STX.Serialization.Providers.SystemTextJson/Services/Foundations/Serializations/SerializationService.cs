@@ -3,8 +3,11 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LHDS.Core.Models.Foundations.Addresses.Exceptions;
 using STX.Serialization.Providers.SystemTextJson.Brokers;
 
 namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serializations
@@ -18,10 +21,22 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             this.systemTextSerializationBroker = systemTextSerializationBroker;
         }
 
-        public ValueTask<TOutput> SerializeAsync<TInput, TOutput>(
+        public async ValueTask<TOutput> SerializeAsync<TInput, TOutput>(
             TInput @object,
-            CancellationToken cancellationToken = default) =>
-            throw new NotImplementedException();
+            CancellationToken cancellationToken = default)
+        {
+            MemoryStream outputStream = new MemoryStream();
+            await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
+
+            switch (typeof(TOutput))
+            {
+                case Type _ when typeof(TOutput) == typeof(string):
+                    return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
+
+                default:
+                    throw new InvalidOperationSerializationException($"Unsupported output type: {typeof(TOutput)}");
+            }
+        }
 
         public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
             TInput json, CancellationToken cancellationToken = default) =>

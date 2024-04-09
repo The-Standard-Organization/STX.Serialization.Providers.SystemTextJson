@@ -22,25 +22,32 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             CancellationToken cancellationToken = default;
             dynamic randomObject = CreateRandomObject();
             object inputObject = randomObject;
-            string randomOutput = GetRandomString();
-            string expectedResult = randomOutput.DeepClone();
-            using var inputStream = new MemoryStream();
-            using var randomOutputStream = new MemoryStream();
+            string randomSerializedOutput = GetRandomString();
+            string expectedResult = randomSerializedOutput.DeepClone();
+            MemoryStream randomOutputStream = new MemoryStream();
 
             systemTextSerializationBrokerMock.Setup(service =>
-                service.SerializeAsync(randomOutputStream, inputObject, It.IsAny<CancellationToken>()))
-                .Callback<Stream, object, CancellationToken>((s, obj, token) =>
+                service.SerializeAsync(
+                    It.Is(SameMemoryStreamAs(randomOutputStream)),
+                    inputObject,
+                    It.IsAny<CancellationToken>()))
+                .Callback<Stream, object, CancellationToken>((outputStream, obj, token) =>
                 {
-                    s = new MemoryStream(Encoding.UTF8.GetBytes(randomOutput));
+                    byte[] bytes = Encoding.UTF8.GetBytes(randomSerializedOutput);
+                    outputStream.Write(bytes, 0, bytes.Length);
                 })
                 .Returns(ValueTask.CompletedTask);
 
             // when
-            string actualResult = await this.serializationService.SerializeAsync<object, string>(inputObject);
-
+            string actualResult = await this.serializationService
+                .SerializeAsync<object, string>(inputObject, cancellationToken);
 
             // then
             actualResult.Should().BeEquivalentTo(expectedResult);
+
+            systemTextSerializationBrokerMock.Verify(service =>
+                service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
+                    Times.Once);
         }
     }
 }
