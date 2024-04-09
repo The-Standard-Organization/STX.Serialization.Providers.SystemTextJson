@@ -64,5 +64,51 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
+
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnSerializeAsync()
+        {
+            CancellationToken cancellationToken = default;
+            dynamic randomObject = CreateRandomObject();
+            object inputObject = randomObject;
+            MemoryStream randomOutputStream = new MemoryStream();
+            string exceptionMessage = GetRandomString();
+            Exception serviceException = new Exception(exceptionMessage);
+
+            var failedSerializationServiceException =
+                new FailedSerializationServiceException(
+                    message: "Failed serialization service error occurred, contact support.",
+                    innerException: serviceException);
+
+            var expectedSerializationServiceException =
+                new SerializationServiceException(
+                    message: "Serialization service error occurred, contact support.",
+                    innerException: failedSerializationServiceException);
+
+            systemTextSerializationBrokerMock.Setup(service =>
+                service.SerializeAsync(
+                    It.IsAny<Stream>(),
+                    It.IsAny<object>(),
+                    It.IsAny<CancellationToken>()))
+                .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<string> serializationTask = this.serializationService
+                .SerializeAsync<object, string>(inputObject, cancellationToken);
+
+            SerializationServiceException actualSerializationServiceException =
+                await Assert.ThrowsAsync<SerializationServiceException>(() =>
+                    serializationTask.AsTask());
+
+            // then
+            actualSerializationServiceException.Should().BeEquivalentTo(expectedSerializationServiceException);
+
+            systemTextSerializationBrokerMock.Verify(service =>
+                service.SerializeAsync(It.IsAny<Stream>(), It.IsAny<object>(), It.IsAny<CancellationToken>()),
+                    Times.Once);
+
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
