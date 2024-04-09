@@ -32,15 +32,15 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                 switch (typeof(TOutput))
                 {
                     case Type _ when typeof(TOutput) == typeof(string):
-                        await Serialize<TInput>(@object, outputStream, cancellationToken);
+                        await Serialize(@object, outputStream, cancellationToken);
                         return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
 
                     case Type _ when typeof(TOutput) == typeof(byte[]):
-                        await Serialize<TInput>(@object, outputStream, cancellationToken);
+                        await Serialize(@object, outputStream, cancellationToken);
                         return (TOutput)(object)outputStream.ToArray();
 
                     case Type _ when typeof(TOutput) == typeof(Stream):
-                        await Serialize<TInput>(@object, outputStream, cancellationToken);
+                        await Serialize(@object, outputStream, cancellationToken);
                         return (TOutput)(object)outputStream;
 
                     default:

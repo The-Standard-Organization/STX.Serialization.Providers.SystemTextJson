@@ -48,6 +48,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             systemTextSerializationBrokerMock.Verify(service =>
                 service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
                     Times.Once);
+
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -83,6 +85,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             systemTextSerializationBrokerMock.Verify(service =>
                 service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
                     Times.Once);
+
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -123,6 +127,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             systemTextSerializationBrokerMock.Verify(service =>
                 service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
                     Times.Once);
+
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

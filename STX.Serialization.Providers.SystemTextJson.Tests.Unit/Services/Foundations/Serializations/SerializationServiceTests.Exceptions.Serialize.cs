@@ -37,19 +37,19 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             var expectedSerializationDependencyException =
                 new SerializationDependencyException(
-                    message: "Serialization dependency validation occurred, please try again.",
+                    message: "Serialization dependency error occurred, contact support.",
                     innerException: failedSerializationException);
 
             systemTextSerializationBrokerMock.Setup(service =>
                 service.SerializeAsync(
                     It.IsAny<Stream>(),
-                    It.IsAny<object>,
+                    It.IsAny<object>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(dependencyException);
 
             // when
-            ValueTask<int> serializationTask = this.serializationService
-                .SerializeAsync<object, int>(inputObject, cancellationToken);
+            ValueTask<string> serializationTask = this.serializationService
+                .SerializeAsync<object, string>(inputObject, cancellationToken);
 
             SerializationDependencyException actualSerializationDependencyException =
                 await Assert.ThrowsAsync<SerializationDependencyException>(() =>
@@ -57,6 +57,11 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             // then
             actualSerializationDependencyException.Should().BeEquivalentTo(expectedSerializationDependencyException);
+
+            systemTextSerializationBrokerMock.Verify(service =>
+                service.SerializeAsync(It.IsAny<Stream>(), It.IsAny<object>(), It.IsAny<CancellationToken>()),
+                    Times.Once);
+
             systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
     }
