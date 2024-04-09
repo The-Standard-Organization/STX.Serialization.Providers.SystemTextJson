@@ -33,6 +33,9 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                 case Type _ when typeof(TOutput) == typeof(string):
                     return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
 
+                case Type _ when typeof(TOutput) == typeof(byte[]):
+                    return (TOutput)(object)outputStream.ToArray();
+
                 default:
                     throw new InvalidOperationSerializationException($"Unsupported output type: {typeof(TOutput)}");
             }
