@@ -2,6 +2,7 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 using STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations;
@@ -31,10 +32,19 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             {
                 var failedSerializationException =
                     new FailedSerializationException(
-                        message: "Failed serialization error occurred, contact support.",
+                        message: "Failed serialization error occurred, please contact support.",
                         innerException: jsonException);
 
                 throw CreateDependencyException(failedSerializationException);
+            }
+            catch (Exception exception)
+            {
+                var failedSerializationServiceException =
+                    new FailedSerializationServiceException(
+                        message: "Failed serialization service occurred, please contact support.",
+                        innerException: exception);
+
+                throw CreateServiceException(failedSerializationServiceException);
             }
         }
 
@@ -51,10 +61,20 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             var serializationDependencyException =
                 new SerializationDependencyException(
-                    message: "Serialization dependency error occurred, contact support.",
+                    message: "Serialization dependency error occurred, please contact support.",
                     innerException: exception);
 
             return serializationDependencyException;
+        }
+
+        private SerializationServiceException CreateServiceException(Xeption exception)
+        {
+            var serializationServiceException =
+                new SerializationServiceException(
+                    message: "Serialization service error occurred, please contact support.",
+                    innerException: exception);
+
+            return serializationServiceException;
         }
     }
 }

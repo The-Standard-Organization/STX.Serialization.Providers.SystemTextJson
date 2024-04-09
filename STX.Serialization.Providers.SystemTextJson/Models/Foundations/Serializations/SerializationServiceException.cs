@@ -6,7 +6,7 @@ using Xeptions;
 
 namespace STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations
 {
-    public class SerializationServiceException : Xeption
+    internal class SerializationServiceException : Xeption
     {
         public SerializationServiceException(string message, Xeption innerException)
             : base(message, innerException)

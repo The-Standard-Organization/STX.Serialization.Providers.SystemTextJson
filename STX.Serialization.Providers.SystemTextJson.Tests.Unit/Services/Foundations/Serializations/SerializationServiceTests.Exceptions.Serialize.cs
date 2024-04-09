@@ -32,12 +32,12 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             var failedSerializationException =
                 new FailedSerializationException(
-                    message: "Failed serialization error occurred, contact support.",
+                    message: "Failed serialization error occurred, please contact support.",
                     innerException: dependencyException);
 
             var expectedSerializationDependencyException =
                 new SerializationDependencyException(
-                    message: "Serialization dependency error occurred, contact support.",
+                    message: "Serialization dependency error occurred, please contact support.",
                     innerException: failedSerializationException);
 
             systemTextSerializationBrokerMock.Setup(service =>
@@ -78,12 +78,12 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             var failedSerializationServiceException =
                 new FailedSerializationServiceException(
-                    message: "Failed serialization service error occurred, contact support.",
+                    message: "Failed serialization service occurred, please contact support.",
                     innerException: serviceException);
 
             var expectedSerializationServiceException =
                 new SerializationServiceException(
-                    message: "Serialization service error occurred, contact support.",
+                    message: "Serialization service error occurred, please contact support.",
                     innerException: failedSerializationServiceException);
 
             systemTextSerializationBrokerMock.Setup(service =>
