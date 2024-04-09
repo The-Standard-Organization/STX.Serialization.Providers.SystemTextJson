@@ -27,6 +27,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             MemoryStream outputStream = new MemoryStream();
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
+            outputStream.Position = 0;
 
             switch (typeof(TOutput))
             {
@@ -35,6 +36,9 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
 
                 case Type _ when typeof(TOutput) == typeof(byte[]):
                     return (TOutput)(object)outputStream.ToArray();
+
+                case Type _ when typeof(TOutput) == typeof(Stream):
+                    return (TOutput)(object)outputStream;
 
                 default:
                     throw new InvalidOperationSerializationException($"Unsupported output type: {typeof(TOutput)}");

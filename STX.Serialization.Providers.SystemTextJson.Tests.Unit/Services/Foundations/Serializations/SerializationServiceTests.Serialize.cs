@@ -109,12 +109,16 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 .Returns(ValueTask.CompletedTask);
 
             // when
-            MemoryStream actualStream = await this.serializationService
-                .SerializeAsync<object, MemoryStream>(inputObject, cancellationToken);
+            Stream actualStream = await this.serializationService
+                .SerializeAsync<object, Stream>(inputObject, cancellationToken);
 
             // then
-            string actualResult = Encoding.UTF8.GetString(actualStream.ToArray());
-            actualResult.Should().BeEquivalentTo(expectedResult);
+            using (MemoryStream actualMemoryStream = new MemoryStream())
+            {
+                actualStream.CopyTo(actualMemoryStream);
+                string actualResult = Encoding.UTF8.GetString(actualMemoryStream.ToArray());
+                actualResult.Should().BeEquivalentTo(expectedResult);
+            }
 
             systemTextSerializationBrokerMock.Verify(service =>
                 service.SerializeAsync(It.IsAny<Stream>(), inputObject, It.IsAny<CancellationToken>()),
