@@ -22,6 +22,10 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             {
                 throw CreateAndLogValidationException(invalidOperationSerializationException);
             }
+            catch (NullSerializationException nullSerializationException)
+            {
+                throw CreateAndLogValidationException(nullSerializationException);
+            }
         }
 
         private SerializationValidationException CreateAndLogValidationException(Xeption exception)

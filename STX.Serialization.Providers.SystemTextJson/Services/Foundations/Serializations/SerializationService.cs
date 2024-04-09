@@ -26,7 +26,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             CancellationToken cancellationToken = default) =>
             TryCatch(async () =>
             {
-                ValidateOnSerialize(@object);
+                ValidateInputIsNotNull(@object);
                 MemoryStream outputStream = new MemoryStream();
 
                 switch (typeof(TOutput))
