@@ -22,12 +22,12 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         public ValueTask<TOutput> SerializeAsync<TInput, TOutput>(
             TInput @object,
             CancellationToken cancellationToken = default) =>
-            TryCatch((ReturningValueTaskFunction<TOutput>)(async () =>
+            TryCatch(async () =>
             {
                 ValidateInputIsNotNull(@object);
 
                 return await SerializeDataAsync<TInput, TOutput>(@object, cancellationToken);
-            }));
+            });
 
         private async ValueTask<TOutput> SerializeDataAsync<TInput, TOutput>(
             TInput @object,
