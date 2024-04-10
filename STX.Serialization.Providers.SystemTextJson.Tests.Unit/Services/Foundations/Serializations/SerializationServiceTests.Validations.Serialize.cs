@@ -23,7 +23,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             object inputObject = randomObject;
 
             var invalidOperationSerializationException = new InvalidOperationSerializationException(
-                message: $"Unsupported output type: {typeof(int)}. " +
+                message: $"Unsupported output type: {typeof(Guid)}. " +
                     $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
 
             var expectedSerializationValidationException =
@@ -32,8 +32,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                     innerException: invalidOperationSerializationException);
 
             // when
-            ValueTask<int> serializationTask = this.serializationService
-                .SerializeAsync<object, int>(inputObject, cancellationToken);
+            ValueTask<Guid> serializationTask = this.serializationService
+                .SerializeAsync<object, Guid>(inputObject, cancellationToken);
 
             SerializationValidationException actualSerializationValidationException =
                 await Assert.ThrowsAsync<SerializationValidationException>(() =>

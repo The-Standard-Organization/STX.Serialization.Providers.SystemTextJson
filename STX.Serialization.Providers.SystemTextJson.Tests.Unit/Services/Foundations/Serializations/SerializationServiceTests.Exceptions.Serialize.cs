@@ -26,9 +26,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             string exceptionMessage = GetRandomString();
             Exception randomException = new Exception(exceptionMessage);
 
-            JsonException dependencyException = new JsonException(
-                message: exceptionMessage,
-                innerException: randomException);
+            JsonException dependencyException =
+                new JsonException(message: exceptionMessage, innerException: randomException);
 
             var failedSerializationException =
                 new FailedSerializationException(

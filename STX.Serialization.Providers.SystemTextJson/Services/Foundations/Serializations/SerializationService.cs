@@ -44,12 +44,16 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                         return (TOutput)(object)outputStream;
 
                     default:
-                        throw new InvalidOperationSerializationException($"Unsupported output type: {typeof(int)}. " +
+                        throw new InvalidOperationSerializationException(
+                            $"Unsupported output type: {typeof(TOutput)}. " +
                             $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
                 }
             });
 
-        private async Task Serialize<TInput>(TInput @object, MemoryStream outputStream, CancellationToken cancellationToken)
+        private async Task Serialize<TInput>(
+            TInput @object,
+            MemoryStream outputStream,
+            CancellationToken cancellationToken)
         {
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
             outputStream.Position = 0;

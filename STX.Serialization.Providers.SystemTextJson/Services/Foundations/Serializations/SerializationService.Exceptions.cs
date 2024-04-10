@@ -48,7 +48,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             }
         }
 
-        private SerializationValidationException CreateValidationException(Xeption exception)
+        private static SerializationValidationException CreateValidationException(Xeption exception)
         {
             var serializationValidationException = new SerializationValidationException(
                 message: "Serialization validation errors occurred, please try again.",
@@ -57,7 +57,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             return serializationValidationException;
         }
 
-        private SerializationDependencyException CreateDependencyException(Xeption exception)
+        private static SerializationDependencyException CreateDependencyException(Xeption exception)
         {
             var serializationDependencyException =
                 new SerializationDependencyException(
@@ -67,7 +67,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             return serializationDependencyException;
         }
 
-        private SerializationServiceException CreateServiceException(Xeption exception)
+        private static SerializationServiceException CreateServiceException(Xeption exception)
         {
             var serializationServiceException =
                 new SerializationServiceException(
