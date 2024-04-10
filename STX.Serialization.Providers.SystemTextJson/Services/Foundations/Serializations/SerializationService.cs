@@ -56,7 +56,6 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             CancellationToken cancellationToken)
         {
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
-            outputStream.Position = 0;
         }
 
         public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
