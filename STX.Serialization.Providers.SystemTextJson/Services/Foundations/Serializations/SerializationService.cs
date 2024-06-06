@@ -94,7 +94,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
 
                 default:
                     throw new InvalidOperationSerializationException(
-                        $"Unsupported output type: {typeof(TOutput)}. " +
+                        $"Unsupported input type: {typeof(TInput)}. " +
                         $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
             }
         }
