@@ -41,7 +41,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 service.DeserializeAsync<dynamic>(
                     It.IsAny<Stream>(),
                     It.IsAny<CancellationToken>()))
-                .ThrowsAsync(dependencyException);
+                        .ThrowsAsync(dependencyException);
 
             // when
             ValueTask<dynamic> serializationTask = this.serializationService
@@ -83,7 +83,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
                 service.DeserializeAsync<dynamic>(
                     It.IsAny<Stream>(),
                     It.IsAny<CancellationToken>()))
-                .ThrowsAsync(serviceException);
+                        .ThrowsAsync(serviceException);
 
             // when
             ValueTask<dynamic> serializationTask = this.serializationService
