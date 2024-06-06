@@ -29,6 +29,10 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                 return await SerializeDataAsync<TInput, TOutput>(@object, cancellationToken);
             });
 
+        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
+            TInput json, CancellationToken cancellationToken = default) =>
+            throw new NotImplementedException();
+
         private async ValueTask<TOutput> SerializeDataAsync<TInput, TOutput>(
             TInput @object,
             CancellationToken cancellationToken)
@@ -61,9 +65,5 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             MemoryStream outputStream,
             CancellationToken cancellationToken) =>
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
-
-        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
-            TInput json, CancellationToken cancellationToken = default) =>
-            throw new NotImplementedException();
     }
 }
