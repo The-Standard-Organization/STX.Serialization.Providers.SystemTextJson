@@ -94,7 +94,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             invalidSerializationException.AddData(
                 key: "json",
-                values: "Text is required");
+                values: "Bytes is required");
 
             var expectedSerializationValidationException =
                 new SerializationValidationException(

@@ -26,6 +26,11 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                         (Rule: IsInvalid($"{json}"), Parameter: nameof(json)));
                     break;
 
+                case Type _ when typeof(TInput) == typeof(byte[]):
+                    Validate(
+                        (Rule: IsInvalid(json as byte[]), Parameter: nameof(json)));
+                    break;
+
                 default:
                     ValidateInputIsNotNull(json);
                     break;
@@ -36,6 +41,12 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             Condition = String.IsNullOrWhiteSpace(text),
             Message = "Text is required"
+        };
+
+        private static dynamic IsInvalid(byte[] bytes) => new
+        {
+            Condition = bytes is null || bytes.Length == 0,
+            Message = "Bytes is required"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
