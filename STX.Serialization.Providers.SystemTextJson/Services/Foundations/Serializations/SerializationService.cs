@@ -77,6 +77,15 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                         return await Deserialize<TOutput>(jsonStream, cancellationToken);
                     }
 
+                case Type _ when typeof(TInput) == typeof(byte[]):
+                    {
+                        Stream jsonStream = new MemoryStream(json as byte[]);
+                        jsonStream.Position = 0;
+                        var result = await Deserialize<TOutput>(jsonStream, cancellationToken);
+
+                        return result;
+                    }
+
                 default:
                     throw new InvalidOperationSerializationException(
                         $"Unsupported output type: {typeof(TOutput)}. " +
