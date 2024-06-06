@@ -73,5 +73,35 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldDeserializeStringToObjectAsync()
+        {
+            // given
+            CancellationToken cancellationToken = default;
+            string randomJsonString = GetRandomString();
+            byte[] inputBytes = Encoding.UTF8.GetBytes(randomJsonString);
+            Stream inputStream = new MemoryStream(inputBytes);
+            dynamic randomObject = CreateRandomObject();
+            object deserializedObject = randomObject;
+            dynamic expectedResult = deserializedObject;
+
+            systemTextSerializationBrokerMock.Setup(service =>
+                service.DeserializeAsync<dynamic>(It.Is(SameStreamAs(inputStream)), cancellationToken))
+                    .ReturnsAsync(deserializedObject);
+
+            // when
+            dynamic actualResult = await this.serializationService
+                .DeserializeAsync<string, dynamic>(randomJsonString, cancellationToken);
+
+            // then
+            ((object)actualResult).Should().BeEquivalentTo((object)expectedResult);
+
+            systemTextSerializationBrokerMock.Verify(service =>
+                service.DeserializeAsync<dynamic>(It.Is(SameStreamAs(inputStream)), cancellationToken),
+                    Times.Once);
+
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
