@@ -42,5 +42,41 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
             actualSerializationValidationException.Should().BeEquivalentTo(expectedSerializationValidationException);
             systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnDeserializeIfStringInputIsNullOrInvalidAsync(
+            string invalidText)
+        {
+            CancellationToken cancellationToken = default;
+            string invalidString = invalidText;
+
+            var invalidSerializationException =
+                new InvalidSerializationException(
+                    message: "Invalid input. Please correct the errors and try again.");
+
+            invalidSerializationException.AddData(
+                key: "json",
+                values: "Text is required");
+
+            var expectedSerializationValidationException =
+                new SerializationValidationException(
+                    message: "Serialization validation errors occurred, please try again.",
+                    innerException: invalidSerializationException);
+
+            // when
+            ValueTask<dynamic> serializationTask = this.serializationService
+                .DeserializeAsync<string, dynamic>(invalidString, cancellationToken);
+
+            SerializationValidationException actualSerializationValidationException =
+                await Assert.ThrowsAsync<SerializationValidationException>(() =>
+                    serializationTask.AsTask());
+
+            // then
+            actualSerializationValidationException.Should().BeEquivalentTo(expectedSerializationValidationException);
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

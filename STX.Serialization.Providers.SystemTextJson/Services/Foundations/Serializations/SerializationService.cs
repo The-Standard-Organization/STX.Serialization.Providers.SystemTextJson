@@ -33,6 +33,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             TInput json, CancellationToken cancellationToken = default) =>
             TryCatch(async () =>
             {
+                ValidateInput(json);
+
                 return await DeserializeDataAsync<TInput, TOutput>(json, cancellationToken);
             });
 

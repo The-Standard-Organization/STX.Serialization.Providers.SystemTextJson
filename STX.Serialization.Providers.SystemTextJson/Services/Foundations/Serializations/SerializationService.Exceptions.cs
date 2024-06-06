@@ -24,6 +24,10 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             {
                 throw CreateValidationException(invalidOperationSerializationException);
             }
+            catch (InvalidSerializationException invalidSerializationException)
+            {
+                throw CreateValidationException(invalidSerializationException);
+            }
             catch (NullSerializationException nullSerializationException)
             {
                 throw CreateValidationException(nullSerializationException);
