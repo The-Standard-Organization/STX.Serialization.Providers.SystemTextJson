@@ -19,11 +19,9 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
         {
             // given
             CancellationToken cancellationToken = default;
-            string randomSerializedOutput = GetRandomString();
-            byte[] inputBytes = Encoding.UTF8.GetBytes(randomSerializedOutput);
+            string randomJsonString = GetRandomString();
+            byte[] inputBytes = Encoding.UTF8.GetBytes(randomJsonString);
             Stream inputStream = new MemoryStream(inputBytes);
-
-
             dynamic randomObject = CreateRandomObject();
             object deserializedObject = randomObject;
             dynamic expectedResult = deserializedObject;

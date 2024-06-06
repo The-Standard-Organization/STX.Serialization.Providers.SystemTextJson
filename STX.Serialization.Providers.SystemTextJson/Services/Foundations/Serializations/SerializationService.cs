@@ -29,9 +29,12 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                 return await SerializeDataAsync<TInput, TOutput>(@object, cancellationToken);
             });
 
-        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
+        public ValueTask<TOutput?> DeserializeAsync<TInput, TOutput>(
             TInput json, CancellationToken cancellationToken = default) =>
-            throw new NotImplementedException();
+            TryCatch(async () =>
+            {
+                return await DeserializeDataAsync<TInput, TOutput>(json, cancellationToken);
+            });
 
         private async ValueTask<TOutput> SerializeDataAsync<TInput, TOutput>(
             TInput @object,
@@ -60,10 +63,36 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             }
         }
 
-        private async Task Serialize<TInput>(
+        private async ValueTask<TOutput?> DeserializeDataAsync<TInput, TOutput>(
+            TInput json,
+            CancellationToken cancellationToken)
+        {
+            switch (typeof(TInput))
+            {
+                case Type _ when typeof(TInput) == typeof(Stream):
+                    {
+                        var jsonStream = json as Stream;
+                        jsonStream.Position = 0;
+
+                        return await Deserialize<TOutput>(jsonStream, cancellationToken);
+                    }
+
+                default:
+                    throw new InvalidOperationSerializationException(
+                        $"Unsupported output type: {typeof(TOutput)}. " +
+                        $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
+            }
+        }
+
+        private async ValueTask Serialize<TInput>(
             TInput @object,
             MemoryStream outputStream,
             CancellationToken cancellationToken) =>
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
+
+        private async ValueTask<TOutput?> Deserialize<TOutput>(
+            Stream jsonStream,
+            CancellationToken cancellationToken) =>
+            await systemTextSerializationBroker.DeserializeAsync<TOutput>(jsonStream, cancellationToken);
     }
 }

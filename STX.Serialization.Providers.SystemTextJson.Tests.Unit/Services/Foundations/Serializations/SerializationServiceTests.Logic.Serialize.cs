@@ -28,7 +28,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             systemTextSerializationBrokerMock.Setup(service =>
                 service.SerializeAsync(
-                    It.Is(SameMemoryStreamAs(randomOutputStream)),
+                    It.Is(SameStreamAs(randomOutputStream)),
                     inputObject,
                     It.IsAny<CancellationToken>()))
                 .Callback<Stream, object, CancellationToken>((outputStream, obj, token) =>
@@ -66,7 +66,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             systemTextSerializationBrokerMock.Setup(service =>
                 service.SerializeAsync(
-                    It.Is(SameMemoryStreamAs(randomOutputStream)),
+                    It.Is(SameStreamAs(randomOutputStream)),
                     inputObject,
                     It.IsAny<CancellationToken>()))
                 .Callback<Stream, object, CancellationToken>((outputStream, obj, token) =>
@@ -104,7 +104,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             systemTextSerializationBrokerMock.Setup(service =>
                 service.SerializeAsync(
-                    It.Is(SameMemoryStreamAs(randomOutputStream)),
+                    It.Is(SameStreamAs(randomOutputStream)),
                     inputObject,
                     It.IsAny<CancellationToken>()))
                 .Callback<Stream, object, CancellationToken>((outputStream, obj, token) =>

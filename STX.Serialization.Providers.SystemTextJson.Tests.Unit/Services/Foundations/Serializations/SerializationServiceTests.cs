@@ -70,8 +70,8 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
 
-        private Expression<Func<MemoryStream, bool>> SameMemoryStreamAs(
-            MemoryStream expectedStream)
+        private Expression<Func<Stream, bool>> SameStreamAs(
+            Stream expectedStream)
         {
             return actualStream =>
                 this.compareLogic.Compare(expectedStream, actualStream)
