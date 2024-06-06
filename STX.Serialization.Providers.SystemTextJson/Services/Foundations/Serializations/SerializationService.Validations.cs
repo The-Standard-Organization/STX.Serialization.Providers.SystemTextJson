@@ -3,6 +3,7 @@
 // ----------------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations;
 
 namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serializations
@@ -31,6 +32,11 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                         (Rule: IsInvalid(json as byte[]), Parameter: nameof(json)));
                     break;
 
+                case Type _ when typeof(TInput) == typeof(Stream):
+                    Validate(
+                        (Rule: IsInvalid(json as Stream), Parameter: nameof(json)));
+                    break;
+
                 default:
                     ValidateInputIsNotNull(json);
                     break;
@@ -47,6 +53,12 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             Condition = bytes is null || bytes.Length == 0,
             Message = "Bytes is required"
+        };
+
+        private static dynamic IsInvalid(Stream stream) => new
+        {
+            Condition = stream is null || stream.Length == 0,
+            Message = "Stream is required"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
