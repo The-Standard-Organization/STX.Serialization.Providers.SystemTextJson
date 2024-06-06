@@ -69,21 +69,27 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             switch (typeof(TInput))
             {
-                case Type _ when typeof(TInput) == typeof(Stream):
+                case Type _ when typeof(TInput) == typeof(string):
                     {
-                        var jsonStream = json as Stream;
-                        jsonStream.Position = 0;
+                        byte[] jsonBytes = Encoding.UTF8.GetBytes($"{json}");
+                        Stream jsonStream = new MemoryStream(buffer: jsonBytes);
 
                         return await Deserialize<TOutput>(jsonStream, cancellationToken);
                     }
 
                 case Type _ when typeof(TInput) == typeof(byte[]):
                     {
-                        Stream jsonStream = new MemoryStream(json as byte[]);
-                        jsonStream.Position = 0;
-                        var result = await Deserialize<TOutput>(jsonStream, cancellationToken);
+                        Stream jsonStream = new MemoryStream(buffer: json as byte[]);
 
-                        return result;
+                        return await Deserialize<TOutput>(jsonStream, cancellationToken);
+                    }
+
+                case Type _ when typeof(TInput) == typeof(Stream):
+                    {
+                        var jsonStream = json as Stream;
+                        jsonStream.Position = 0;
+
+                        return await Deserialize<TOutput>(jsonStream, cancellationToken);
                     }
 
                 default:
