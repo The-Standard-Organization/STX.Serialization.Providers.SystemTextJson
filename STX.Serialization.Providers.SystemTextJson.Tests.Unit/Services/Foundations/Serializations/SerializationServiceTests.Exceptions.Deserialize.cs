@@ -60,5 +60,47 @@ namespace STX.Serialization.Providers.SystemTextJson.Tests.Unit.Services.Foundat
 
             systemTextSerializationBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnDeserializeAsync()
+        {
+            CancellationToken cancellationToken = default;
+            string someString = GetRandomString();
+            string exceptionMessage = GetRandomString();
+            Exception serviceException = new Exception(exceptionMessage);
+
+            var failedSerializationServiceException =
+                new FailedSerializationServiceException(
+                    message: "Failed serialization service occurred, please contact support.",
+                    innerException: serviceException);
+
+            var expectedSerializationServiceException =
+                new SerializationServiceException(
+                    message: "Serialization service error occurred, please contact support.",
+                    innerException: failedSerializationServiceException);
+
+            systemTextSerializationBrokerMock.Setup(service =>
+                service.DeserializeAsync<dynamic>(
+                    It.IsAny<Stream>(),
+                    It.IsAny<CancellationToken>()))
+                .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<dynamic> serializationTask = this.serializationService
+                .DeserializeAsync<string, dynamic>(someString, cancellationToken);
+
+            SerializationServiceException actualSerializationServiceException =
+                await Assert.ThrowsAsync<SerializationServiceException>(() =>
+                    serializationTask.AsTask());
+
+            // then
+            actualSerializationServiceException.Should().BeEquivalentTo(expectedSerializationServiceException);
+
+            systemTextSerializationBrokerMock.Verify(service =>
+                service.DeserializeAsync<dynamic>(It.IsAny<Stream>(), It.IsAny<CancellationToken>()),
+                    Times.Once);
+
+            systemTextSerializationBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
