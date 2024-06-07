@@ -29,7 +29,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                 return await SerializeDataAsync<TInput, TOutput>(@object, cancellationToken);
             });
 
-        public ValueTask<TOutput?> DeserializeAsync<TInput, TOutput>(
+        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
             TInput json, CancellationToken cancellationToken = default) =>
             TryCatch(async () =>
             {
@@ -46,16 +46,19 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
 
             switch (typeof(TOutput))
             {
-                case Type _ when typeof(TOutput) == typeof(string):
+                case Type outputType when typeof(TOutput) == typeof(string):
                     await Serialize(@object, outputStream, cancellationToken);
+
                     return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
 
-                case Type _ when typeof(TOutput) == typeof(byte[]):
+                case Type outputType when typeof(TOutput) == typeof(byte[]):
                     await Serialize(@object, outputStream, cancellationToken);
+
                     return (TOutput)(object)outputStream.ToArray();
 
-                case Type _ when typeof(TOutput) == typeof(Stream):
+                case Type outputType when typeof(TOutput) == typeof(Stream):
                     await Serialize(@object, outputStream, cancellationToken);
+
                     return (TOutput)(object)outputStream;
 
                 default:
@@ -65,13 +68,13 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             }
         }
 
-        private async ValueTask<TOutput?> DeserializeDataAsync<TInput, TOutput>(
+        private async ValueTask<TOutput> DeserializeDataAsync<TInput, TOutput>(
             TInput json,
             CancellationToken cancellationToken)
         {
             switch (typeof(TInput))
             {
-                case Type _ when typeof(TInput) == typeof(string):
+                case Type iputType when iputType == typeof(string):
                     {
                         byte[] jsonBytes = Encoding.UTF8.GetBytes($"{json}");
                         Stream jsonStream = new MemoryStream(buffer: jsonBytes);
@@ -79,14 +82,14 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                         return await Deserialize<TOutput>(jsonStream, cancellationToken);
                     }
 
-                case Type _ when typeof(TInput) == typeof(byte[]):
+                case Type iputType when iputType == typeof(byte[]):
                     {
                         Stream jsonStream = new MemoryStream(buffer: json as byte[]);
 
                         return await Deserialize<TOutput>(jsonStream, cancellationToken);
                     }
 
-                case Type _ when typeof(TInput) == typeof(Stream):
+                case Type iputType when iputType == typeof(Stream):
                     {
                         var jsonStream = json as Stream;
                         jsonStream.Position = 0;

@@ -22,17 +22,17 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
         {
             switch (typeof(TInput))
             {
-                case Type _ when typeof(TInput) == typeof(string):
+                case Type iputType when iputType == typeof(string):
                     Validate(
                         (Rule: IsInvalid($"{json}"), Parameter: nameof(json)));
                     break;
 
-                case Type _ when typeof(TInput) == typeof(byte[]):
+                case Type iputType when iputType == typeof(byte[]):
                     Validate(
                         (Rule: IsInvalid(json as byte[]), Parameter: nameof(json)));
                     break;
 
-                case Type _ when typeof(TInput) == typeof(Stream):
+                case Type iputType when iputType == typeof(Stream):
                     Validate(
                         (Rule: IsInvalid(json as Stream), Parameter: nameof(json)));
                     break;

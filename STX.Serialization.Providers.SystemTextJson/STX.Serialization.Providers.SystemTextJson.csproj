@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 		<Title>STX.Serialization.Providers.SystemTextJson</Title>
 		<Product>STX.Serialization.Providers.SystemTextJson</Product>
 		<PackageId>STX.Serialization.Providers.SystemTextJson</PackageId>

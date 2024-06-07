@@ -13,7 +13,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             TInput @object,
             CancellationToken cancellationToken = default);
 
-        ValueTask<TOutput?> DeserializeAsync<TInput, TOutput>(
+        ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
             TInput json,
             CancellationToken cancellationToken = default);
     }
