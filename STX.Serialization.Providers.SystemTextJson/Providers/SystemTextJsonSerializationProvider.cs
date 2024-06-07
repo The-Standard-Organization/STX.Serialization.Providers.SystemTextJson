@@ -2,13 +2,11 @@
 // Copyright (c) The Standard Organization: A coalition of the Good-Hearted Engineers
 // ----------------------------------------------------------------------------------
 
-using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using STX.Serialization.Providers.Abstractions;
-using STX.Serialization.Providers.Abstractions.Models;
 using STX.Serialization.Providers.SystemTextJson.Brokers;
 using STX.Serialization.Providers.SystemTextJson.Models.Foundations.Serializations;
 using STX.Serialization.Providers.SystemTextJson.Models.Providers.Serializations.SystemTextJson.Exceptions;
@@ -33,8 +31,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Providers
             this.serializationService = host.Services.GetRequiredService<ISerializationService>();
         }
 
-        public ValueTask<TOutput> Serialize<TInput, TOutput>(TInput @object)
-            where TOutput : IDataRepresentation<string>, IDataRepresentation<byte[]>, IDataRepresentation<Stream>
+        public ValueTask<TOutput> SerializeAsync<TInput, TOutput>(TInput @object)
         {
             try
             {
@@ -68,8 +65,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Providers
             }
         }
 
-        public ValueTask<TOutput> Deserialize<TInput, TOutput>(TInput json)
-            where TInput : IDataRepresentation<string>, IDataRepresentation<byte[]>, IDataRepresentation<Stream> =>
+        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(TInput json) =>
             throw new System.NotImplementedException();
 
         private static IHost RegisterServices(JsonSerializerOptions jsonSerializerOptions)
