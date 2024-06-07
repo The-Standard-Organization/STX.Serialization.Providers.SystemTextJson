@@ -46,17 +46,17 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
 
             switch (typeof(TOutput))
             {
-                case Type outputType when typeof(TOutput) == typeof(string):
+                case Type outputType when outputType == typeof(string):
                     await Serialize(@object, outputStream, cancellationToken);
 
                     return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
 
-                case Type outputType when typeof(TOutput) == typeof(byte[]):
+                case Type outputType when outputType == typeof(byte[]):
                     await Serialize(@object, outputStream, cancellationToken);
 
                     return (TOutput)(object)outputStream.ToArray();
 
-                case Type outputType when typeof(TOutput) == typeof(Stream):
+                case Type outputType when outputType == typeof(Stream):
                     await Serialize(@object, outputStream, cancellationToken);
 
                     return (TOutput)(object)outputStream;
