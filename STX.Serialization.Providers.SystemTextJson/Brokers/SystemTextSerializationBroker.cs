@@ -28,7 +28,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Brokers
                 cancellationToken);
         }
 
-        public async ValueTask<T?> DeserializeAsync<T>(
+        public async ValueTask<T> DeserializeAsync<T>(
             Stream stream,
             CancellationToken cancellationToken = default)
         {

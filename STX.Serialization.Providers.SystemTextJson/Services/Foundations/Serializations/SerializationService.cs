@@ -29,6 +29,15 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
                 return await SerializeDataAsync<TInput, TOutput>(@object, cancellationToken);
             });
 
+        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
+            TInput json, CancellationToken cancellationToken = default) =>
+            TryCatch(async () =>
+            {
+                ValidateInput(json);
+
+                return await DeserializeDataAsync<TInput, TOutput>(json, cancellationToken);
+            });
+
         private async ValueTask<TOutput> SerializeDataAsync<TInput, TOutput>(
             TInput @object,
             CancellationToken cancellationToken)
@@ -37,16 +46,19 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
 
             switch (typeof(TOutput))
             {
-                case Type _ when typeof(TOutput) == typeof(string):
+                case Type outputType when outputType == typeof(string):
                     await Serialize(@object, outputStream, cancellationToken);
+
                     return (TOutput)(object)Encoding.UTF8.GetString(outputStream.ToArray());
 
-                case Type _ when typeof(TOutput) == typeof(byte[]):
+                case Type outputType when outputType == typeof(byte[]):
                     await Serialize(@object, outputStream, cancellationToken);
+
                     return (TOutput)(object)outputStream.ToArray();
 
-                case Type _ when typeof(TOutput) == typeof(Stream):
+                case Type outputType when outputType == typeof(Stream):
                     await Serialize(@object, outputStream, cancellationToken);
+
                     return (TOutput)(object)outputStream;
 
                 default:
@@ -56,14 +68,51 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             }
         }
 
-        private async Task Serialize<TInput>(
+        private async ValueTask<TOutput> DeserializeDataAsync<TInput, TOutput>(
+            TInput json,
+            CancellationToken cancellationToken)
+        {
+            switch (typeof(TInput))
+            {
+                case Type iputType when iputType == typeof(string):
+                    {
+                        byte[] jsonBytes = Encoding.UTF8.GetBytes($"{json}");
+                        Stream jsonStream = new MemoryStream(buffer: jsonBytes);
+
+                        return await Deserialize<TOutput>(jsonStream, cancellationToken);
+                    }
+
+                case Type iputType when iputType == typeof(byte[]):
+                    {
+                        Stream jsonStream = new MemoryStream(buffer: json as byte[]);
+
+                        return await Deserialize<TOutput>(jsonStream, cancellationToken);
+                    }
+
+                case Type iputType when iputType == typeof(Stream):
+                    {
+                        var jsonStream = json as Stream;
+                        jsonStream.Position = 0;
+
+                        return await Deserialize<TOutput>(jsonStream, cancellationToken);
+                    }
+
+                default:
+                    throw new InvalidOperationSerializationException(
+                        $"Unsupported input type: {typeof(TInput)}. " +
+                        $"Supported types:  {typeof(string)}, {typeof(byte[])}, {typeof(Stream)}");
+            }
+        }
+
+        private async ValueTask Serialize<TInput>(
             TInput @object,
             MemoryStream outputStream,
             CancellationToken cancellationToken) =>
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
 
-        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(
-            TInput json, CancellationToken cancellationToken = default) =>
-            throw new NotImplementedException();
+        private async ValueTask<TOutput> Deserialize<TOutput>(
+            Stream jsonStream,
+            CancellationToken cancellationToken) =>
+            await systemTextSerializationBroker.DeserializeAsync<TOutput>(jsonStream, cancellationToken);
     }
 }
