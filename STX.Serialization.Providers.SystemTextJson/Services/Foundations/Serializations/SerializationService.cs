@@ -110,7 +110,7 @@ namespace STX.Serialization.Providers.SystemTextJson.Services.Foundations.Serial
             CancellationToken cancellationToken) =>
             await systemTextSerializationBroker.SerializeAsync(outputStream, @object, cancellationToken);
 
-        private async ValueTask<TOutput?> Deserialize<TOutput>(
+        private async ValueTask<TOutput> Deserialize<TOutput>(
             Stream jsonStream,
             CancellationToken cancellationToken) =>
             await systemTextSerializationBroker.DeserializeAsync<TOutput>(jsonStream, cancellationToken);
