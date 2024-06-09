@@ -45,8 +45,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="STX.Serialization.Providers.Abstractions" Version="0.1.1" />
-	  <PackageReference Include="System.Text.Json" Version="8.0.3" />
+		<PackageReference Include="STX.Serialization.Providers.Abstractions" Version="0.1.2" />
+		<PackageReference Include="System.Text.Json" Version="8.0.3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
