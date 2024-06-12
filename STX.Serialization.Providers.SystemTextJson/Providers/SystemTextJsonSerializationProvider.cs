@@ -65,8 +65,39 @@ namespace STX.Serialization.Providers.SystemTextJson.Providers
             }
         }
 
-        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(TInput json) =>
-            throw new System.NotImplementedException();
+        public ValueTask<TOutput> DeserializeAsync<TInput, TOutput>(TInput json)
+        {
+            try
+            {
+                return this.serializationService.DeserializeAsync<TInput, TOutput>(json);
+            }
+            catch (SerializationValidationException serializationValidationException)
+            {
+                throw new SystemTextJsonSerializationProviderValidationException(
+                    message: "Serialization provider validation error(s) occurred, fix the error(s) and try again.",
+                    innerException: serializationValidationException.InnerException as Xeption,
+                    data: serializationValidationException.InnerException.Data);
+            }
+            catch (SerializationDependencyValidationException serializationDependencyValidationException)
+            {
+                throw new SystemTextJsonSerializationProviderValidationException(
+                    message: "Serialization provider validation error(s) occurred, fix the error(s) and try again.",
+                    serializationDependencyValidationException.InnerException as Xeption,
+                    data: serializationDependencyValidationException.InnerException.Data);
+            }
+            catch (SerializationDependencyException serializationDependencyException)
+            {
+                throw new SystemTextJsonSerializationProviderDependencyException(
+                    message: "Serialization provider dependency error occurred, please contact support.",
+                    serializationDependencyException.InnerException as Xeption);
+            }
+            catch (SerializationServiceException serializationServiceException)
+            {
+                throw new SystemTextJsonSerializationProviderServiceException(
+                    message: "Serialization provider service error occurred, please contact support.",
+                    serializationServiceException.InnerException as Xeption);
+            }
+        }
 
         private static IHost RegisterServices(JsonSerializerOptions jsonSerializerOptions)
         {
